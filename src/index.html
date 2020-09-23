@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Paper Collab Map Visualization</title>
+    <link rel="stylesheet" href="index.css">
+    <script defer src ="RenderMap.js"></script>
+  </head>
+
+  <script>
+    const {ipcRenderer}=require('electron');
+    function clickButton(){
+      ipcRenderer.send('click-button','true');
+}
+
+ipcRenderer.on('update-button-text',(event,path)=>{
+  document.getElementById("FolderBtn").innerHTML = path;
+  get_list(path); 
+});
+
+ipcRenderer.on('total-files',(event,data)=>{
+  document.getElementById("totalFiles").innerHTML = data;
+});
+
+ipcRenderer.on('processed-files',(event,data)=>{
+  document.getElementById("processedFiles").innerHTML = data;
+});
+
+
+ipcRenderer.on('edu-count',(event,data)=>{
+  document.getElementById("eduCount").innerHTML = data;
+  document.getElementById("eduCount2").innerHTML = data;
+});
+
+ipcRenderer.on('com-count',(event,data)=>{
+  document.getElementById("comCount").innerHTML = data;
+});
+
+ipcRenderer.on('other-count',(event,data)=>{
+  document.getElementById("otherCount").innerHTML = data;
+});
+
+ipcRenderer.on('mapped-edu-count',(event,data)=>{
+  document.getElementById("mappedEdu").innerHTML = data;
+});
+
+    </script>
+
+  <body>
+    <div id ="titleArea">
+
+      <span id= "titleInput" contenteditable="true">Conference Name</span>
+    </div>
+    
+    <div class="upload-btn-wrapper">
+      <button id = "FolderBtn" onclick="clickButton()">Select PDF Folder</button>
+    </div>
+
+    <div id ="infoBar">
+      <div class ="statBox"><span id ="processedFiles">0 </span>/<span id ="totalFiles"> 0</span><div class ="subtitle">PDFS Processed</div> </div>
+      <div class  ="statBox"><span id ="eduCount">0</span> / <span id ="comCount"> 0 </span> / <span id="otherCount"> 0</span> <div class ="subtitle">.edu /.com /other</div> </div>
+      <div class  ="statBox"> <span id="mappedEdu"> 0 </span> / <span id ="eduCount2"> 0 </span> <div class ="subtitle">edu's mapped</div></div>
+    </div>
+    <div id ="container"></div>
+  </body>
+</html>
